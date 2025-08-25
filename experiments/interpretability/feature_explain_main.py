@@ -17,20 +17,20 @@ from models_lib import WDCNN, CNN1D
 import warnings
 warnings.filterwarnings('ignore')
 
-# 设置matplotlib使用SVG后端
-plt.rcParams['svg.fonttype'] = 'none'  # 确保字体在SVG中正确显示
+# Set matplotlib to use SVG backend
+plt.rcParams['svg.fonttype'] = 'none'  # Ensure fonts display correctly in SVG
 
-# 配置
+# Configuration
 COLORS = {"feat":"#2090C5", "attn_before":"#ADB5BD", "attn_after":"#2090C5"}
-fs = 12000  # 采样率 12kHz
-L = 1024   # 信号长度
-N = 8      # 随机选择样本数
+fs = 12000  # Sampling rate 12kHz
+L = 1024   # Signal length
+N = 8      # Number of randomly selected samples
 
-# 创建结果目录
+# Create results directory
 results_dir = os.path.join(os.path.dirname(__file__), 'results')
 os.makedirs(results_dir, exist_ok=True)
 
-# 读取数据
+# Load data
 X = np.load(os.path.join(os.path.dirname(__file__), 'data', 'test_data.npy'))  # shape: [N, 1024]
 y = np.load(os.path.join(os.path.dirname(__file__), 'data', 'test_labels.npy'))
 
@@ -39,13 +39,13 @@ idx = np.random.choice(len(X), N, replace=False)
 X_sel = X[idx]
 y_sel = y[idx]
 
-# 设备
+# Device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(f"使用设备: {device}")
+print(f"Using device: {device}")
 
 def load_model_with_compatibility(model, model_path, model_name):
-    """兼容性模型加载函数"""
-    print(f"\n加载 {model_name} 模型...")
+    """Compatible model loading function"""
+    print(f"\nLoading {model_name} model...")
     ckpt = torch.load(model_path, map_location=device)
     try:
         if 'model_state_dict' in ckpt:
@@ -53,33 +53,33 @@ def load_model_with_compatibility(model, model_path, model_name):
         else:
             model.load_state_dict(ckpt, strict=False)
     except Exception as e:
-        print(f"模型权重加载警告: {e}")
-        print("使用strict=False模式加载兼容的权重")
-        # 尝试手动匹配权重
+        print(f"Model weight loading warning: {e}")
+        print("Loading compatible weights using strict=False mode")
+        # Try manual weight matching
         model_dict = model.state_dict()
         if 'model_state_dict' in ckpt:
             pretrained_dict = ckpt['model_state_dict']
         else:
             pretrained_dict = ckpt
         
-        # 过滤掉不匹配的键
+        # Filter out mismatched keys
         pretrained_dict = {k: v for k, v in pretrained_dict.items() 
                           if k in model_dict and model_dict[k].shape == v.shape}
         model_dict.update(pretrained_dict)
         model.load_state_dict(model_dict)
-        print(f"成功加载 {len(pretrained_dict)} 个匹配的权重参数")
+        print(f"Successfully loaded {len(pretrained_dict)} matching weight parameters")
     
     model.eval()
-    print(f"{model_name} 模型加载完成")
+    print(f"{model_name} model loading completed")
     return model
 
 def extract_features_with_hook(model, model_name, hook_layer_name):
-    """使用钩子函数提取特征"""
+    """Extract features using hook functions"""
     features_captured = []
     
     def hook_function(module, input, output):
         if isinstance(output, tuple):
-            # 对于DFTSRNet的AFBS模块，取第二个元素（modals）
+            # For DFTSRNet AFBS module, take the second element (modals)
             if model_name == 'DFTSRNet' and len(output) > 1:
                 features = output[1]  # [B, K, L]
             else:
@@ -87,45 +87,45 @@ def extract_features_with_hook(model, model_name, hook_layer_name):
         else:
             features = output
         
-        # 处理不同维度的特征
+        # Handle features of different dimensions
         if len(features.shape) == 4:  # [B, C, H, W]
-            # 对于CNN特征，取全局平均池化
+            # For CNN features, apply global average pooling
             features = F.adaptive_avg_pool2d(features, (1, L//4)).squeeze(2)  # [B, C, L//4]
-        elif len(features.shape) == 3:  # [B, C, L] 或 [B, K, L]
-            pass  # 保持原样
+        elif len(features.shape) == 3:  # [B, C, L] or [B, K, L]
+            pass  # Keep as is
         elif len(features.shape) == 2:  # [B, F]
-            # 扩展为3维
+            # Expand to 3D
             features = features.unsqueeze(1)  # [B, 1, F]
         
         features_captured.append(features.detach().cpu())
     
-    # 注册钩子
+    # Register hook
     hook_handle = None
     for name, module in model.named_modules():
         if hook_layer_name in name:
             hook_handle = module.register_forward_hook(hook_function)
-            print(f"已注册 {name} 模块钩子")
+            print(f"Registered hook for {name} module")
             break
     
     if hook_handle is None:
-        print(f"警告: 未找到 {hook_layer_name} 模块")
+        print(f"Warning: {hook_layer_name} module not found")
         return None
     
-    # 前向传播获取特征
+    # Forward pass to extract features
     with torch.no_grad():
         for i in range(N):
             x_tensor = torch.tensor(X_sel[i:i+1], dtype=torch.float32).unsqueeze(1).to(device)
             _ = model(x_tensor)
     
-    # 移除钩子
+    # Remove hook
     hook_handle.remove()
     
-    # 处理捕获的特征
+    # Process captured features
     if features_captured:
         feats_list = []
         for i in range(N):
-            feat = features_captured[i].squeeze(0).numpy()  # 移除batch维度
-            if len(feat.shape) == 1:  # 如果是1维，扩展为2维
+            feat = features_captured[i].squeeze(0).numpy()  # Remove batch dimension
+            if len(feat.shape) == 1:  # If 1D, expand to 2D
                 feat = feat.reshape(1, -1)
             feats_list.append(feat)
         
@@ -135,47 +135,47 @@ def extract_features_with_hook(model, model_name, hook_layer_name):
         return None
 
 def analyze_model_interpretability(model, model_name, hook_layer_name):
-    """对单个模型进行可解释性分析"""
+    """Perform interpretability analysis on a single model"""
     print(f"\n{'='*60}")
-    print(f"开始 {model_name} 模型可解释性分析...")
+    print(f"Starting {model_name} model interpretability analysis...")
     print(f"{'='*60}")
     
-    # 提取特征
+    # Extract features
     feats = extract_features_with_hook(model, model_name, hook_layer_name)
     
     if feats is None:
-        print(f"无法提取 {model_name} 的特征，使用模拟数据")
+        print(f"Unable to extract {model_name} features, using simulated data")
         if model_name == 'DFTSRNet':
-            feats = np.random.randn(N, 8, L//2)  # 8个频带
+            feats = np.random.randn(N, 8, L//2)  # 8 frequency bands
         else:
-            feats = np.random.randn(N, 16, L//4)  # 16个通道
+            feats = np.random.randn(N, 16, L//4)  # 16 channels
     
-    K = feats.shape[1]  # 频带/通道数量
-    print(f"捕获特征形状: {feats.shape}")
+    K = feats.shape[1]  # Number of frequency bands/channels
+    print(f"Captured feature shape: {feats.shape}")
     
-    # ==================== 1. 特征提取形态解释 ====================
-    print(f"\n1. {model_name} 特征提取形态解释")
+    # ==================== 1. Feature Extraction Morphology Interpretation ====================
+    print(f"\n1. {model_name} Feature Extraction Morphology Interpretation")
     print("-" * 50)
     
-    # 1.1 最底层特征图可视化
-    print(f"\n1.1 {model_name} 最底层特征图可视化...")
+    # 1.1 Bottom-layer feature map visualization
+    print(f"\n1.1 {model_name} Bottom-layer feature map visualization...")
     
-    # 计算FFT功率谱
-    freq_bins = rfftfreq(feats.shape[2], d=1/fs)  # 频率轴
-    P_all = []  # 存储所有样本的功率谱
+    # Calculate FFT power spectrum
+    freq_bins = rfftfreq(feats.shape[2], d=1/fs)  # Frequency axis
+    P_all = []  # Store power spectra of all samples
     
     for i in range(N):
         P_sample = []
         for k in range(K):
             F_k = feats[i, k, :]
             P_k = np.abs(fft(F_k))**2
-            P_k = P_k / (np.max(P_k) + 1e-8)  # 归一化到[0,1]
-            P_sample.append(P_k[:len(freq_bins)])  # 只取正频率部分
+            P_k = P_k / (np.max(P_k) + 1e-8)  # Normalize to [0,1]
+            P_sample.append(P_k[:len(freq_bins)])  # Only take positive frequency part
         P_all.append(np.array(P_sample))
     
     P_all = np.array(P_all)  # [N, K, freq_bins]
     
-    # 绘制热图
+    # Draw heatmap
     fig, axes = plt.subplots(2, 4, figsize=(20, 10))
     axes = axes.flatten()
     
@@ -191,13 +191,13 @@ def analyze_model_interpretability(model, model_name, hook_layer_name):
     plt.savefig(os.path.join(results_dir, f'Fig_A1_{model_name}_FeatMaps.svg'), 
                 format='svg', bbox_inches='tight')
     plt.close()
-    print(f"已保存: Fig_A1_{model_name}_FeatMaps.svg")
+    print(f"Saved: Fig_A1_{model_name}_FeatMaps.svg")
     
-    # 1.2 稀疏度量化
-    print(f"\n1.2 {model_name} 稀疏度量化...")
+    # 1.2 Sparsity quantification
+    print(f"\n1.2 {model_name} Sparsity quantification...")
     
     def gini_coefficient(x):
-        """计算Gini系数"""
+        """Calculate Gini coefficient"""
         x = np.sort(x.flatten())
         n = len(x)
         if n == 0 or np.sum(x) == 0:

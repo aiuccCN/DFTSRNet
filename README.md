@@ -26,7 +26,7 @@ DFTSRNet/
 │   ├── dataset_split.py             # Dataset splitting
 │   └── dataset_split_ABC.py         # Dataset splitting for ABC datasets
 ├── data/                           # Dataset directory
-│   └── 西储大学实验数据集/           # Case Western Reserve University dataset
+│   └── CWRU_Dataset/               # Case Western Reserve University dataset
 │       ├── A/                      # Dataset A
 │       ├── B/                      # Dataset B
 │       ├── C/                      # Dataset C

@@ -1,9 +1,9 @@
-# compare.py  (覆盖现有文件)
+# compare.py  (overwrite existing file)
 # ----------------------------------------------------------
-# 对比 6 个模型（无 ResNet50）在种子 42 / 97 / 20 下的性能
-# 生成 acc_summary_seed*.csv 及 acc_summary_mean_std.csv
-# 保存每个训练的模型到指定目录
-# 添加训练曲线绘制功能
+# Compare 6 models (without ResNet50) performance under seeds 42 / 97 / 20
+# Generate acc_summary_seed*.csv and acc_summary_mean_std.csv
+# Save each trained model to specified directory
+# Add training curve plotting functionality
 # ----------------------------------------------------------
 import os, csv, warnings, random
 warnings.filterwarnings("ignore")
@@ -21,15 +21,15 @@ device = Config.DEVICE
 BASE_PATH = Config.BASE_DATA_PATH   # 根目录由 config.py 提供
 DATASETS = {d:os.path.join(BASE_PATH,f'Dataset_{d}') for d in ['A','B','C']}
 
-# 输出目录
+# Output directory
 OUTPUT_DIR = r'e:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\GPT修改版\对比实验\对比试验结果'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# 模型保存目录
+# Model save directory
 MODEL_DIR = os.path.join(OUTPUT_DIR, 'saved_models')
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-# ---------------- 设定随机种子 ----------------
+# ---------------- Set random seed ----------------
 def set_seed(seed):
     random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
     if torch.cuda.is_available():
@@ -156,7 +156,7 @@ for seed in [42,97,20]:
         w = csv.writer(f); w.writerow(['Dataset']+list(MODELS.keys()))
         for ds in ['A','B','C']:
             w.writerow([ds]+[f"{acc_res[ds][m]:.4f}" for m in MODELS])
-    print(f"  -> 保存 {out_csv}")
+    print(f"  -> Saved {out_csv}")
 
 # -------- 绘制训练曲线图 --------
 for ds in ['A', 'B', 'C']:
@@ -165,7 +165,7 @@ for ds in ['A', 'B', 'C']:
         loss_plot = {m: curves[1] for m, curves in all_curves[ds].items()}
         
         xs = np.arange(1, 201)
-        palette = {  # 用户模板 RGB
+        palette = {  # User template RGB
             'SVM+Wavelet': (144/255, 201/255, 231/255),
             '1D-CNN': (33/255, 158/255, 188/255),
             'WDCNN': (19/255, 103/255, 131/255),
@@ -191,7 +191,7 @@ for ds in ['A', 'B', 'C']:
         curve_path = os.path.join(OUTPUT_DIR, f'curves_Dataset{ds}_ALL.png')
         plt.savefig(curve_path, dpi=300)
         plt.close()
-        print(f"  -> 保存训练曲线图: {curve_path}")
+        print(f"  -> Saved training curve plot: {curve_path}")
 
 # -------- 计算均值和标准差 --------
 mean_std = {ds:{m:[] for m in MODELS} for ds in DATASETS}
@@ -208,28 +208,28 @@ with open(final_csv,'w',newline='') as f:
         means=[np.mean(mean_std[ds][m]) for m in MODELS]
         stds =[np.std(mean_std[ds][m])  for m in MODELS]
         w.writerow([ds]+[f"{v:.4f}" for v in means]+[f"{v:.4f}" for v in stds])
-print(f"\n全部完成：已生成单种子结果文件及汇总文件")
-print(f"结果保存在: {OUTPUT_DIR}")
-print(f"模型保存在: {MODEL_DIR}")
+print(f"\nAll completed: Generated single-seed result files and summary files")
+print(f"Results saved in: {OUTPUT_DIR}")
+print(f"Models saved in: {MODEL_DIR}")
 
 # -------- 生成模型保存信息汇总 --------
 model_info_path = os.path.join(OUTPUT_DIR, 'saved_models_info.txt')
 with open(model_info_path, 'w', encoding='utf-8') as f:
-    f.write("保存的模型文件信息\n")
+    f.write("Saved Model Files Information\n")
     f.write("=" * 50 + "\n\n")
-    f.write("文件命名规则: {模型名}_{数据集}_{种子}.{扩展名}\n")
-    f.write("- 深度学习模型: .pth 格式\n")
-    f.write("- SVM模型: .pkl 格式\n\n")
-    
-    f.write("保存的模型列表:\n")
+    f.write("File naming convention: {model_name}_{dataset}_{seed}.{extension}\n")
+    f.write("- Deep learning models: .pth format\n")
+    f.write("- SVM models: .pkl format\n\n")
+
+    f.write("List of saved models:\n")
     for seed in [42, 97, 20]:
-        f.write(f"\n种子 {seed}:\n")
+        f.write(f"\nSeed {seed}:\n")
         for ds in ['A', 'B', 'C']:
-            f.write(f"  数据集 {ds}:\n")
+            f.write(f"  Dataset {ds}:\n")
             for model_name in MODELS.keys():
                 if model_name == 'SVM+Wavelet':
                     f.write(f"    - {model_name}_{ds}_seed{seed}.pkl\n")
                 else:
                     f.write(f"    - {model_name}_{ds}_seed{seed}.pth\n")
 
-print(f"模型信息汇总保存在: {model_info_path}")
+print(f"Model information summary saved in: {model_info_path}")

@@ -1,15 +1,15 @@
-全噪声Dataset_B信息 (SNR: -4dB)
+Full Noisy Dataset_B Information (SNR: -4dB)
 ==================================================
 
-原始数据路径: e:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\数据集\西储大学实验数据集\Dataset_B
-输出路径: e:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\GPT修改版\不同噪声水平实验\Dataset_B_Full_Noisy_-4dB
-目标SNR: -4 dB
-随机种子: 42
+Original data path: e:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\数据集\西储大学实验数据集\Dataset_B
+Output path: e:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\GPT修改版\不同噪声水平实验\Dataset_B_Full_Noisy_-4dB
+Target SNR: -4 dB
+Random seed: 42
 
-数据集结构:
-- 训练数据: 添加-4dB噪声
-- 验证数据: 添加-4dB噪声  
-- 测试数据: 添加-4dB噪声
+Dataset structure:
+- Training data: Added -4dB noise
+- Validation data: Added -4dB noise  
+- Test data: Added -4dB noise
 
-注意: 所有数据集都添加了相同水平的噪声
-这种设置用于训练噪声鲁棒的模型
+Note: All datasets have the same level of noise added
+This setup is used to train noise-robust models

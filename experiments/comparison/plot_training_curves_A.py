@@ -29,7 +29,7 @@ def wp_feat(sig, wav='db4', lvl=3):
     return np.array([np.sqrt(np.sum(n.data**2)) for n in wp.get_level(lvl,'freq')])
 
 def run_svm_for_curves(root):
-    """运行SVM获取准确率，用于训练曲线"""
+    """Run SVM to get accuracy for training curves"""
     tr_x = np.load(os.path.join(root,'train_data_preprocessed.npy'))
     va_x = np.load(os.path.join(root,'val_data_preprocessed.npy'))
     te_x = np.load(os.path.join(root,'test_data_preprocessed.npy'))
@@ -44,7 +44,7 @@ def run_svm_for_curves(root):
     return accuracy_score(te_y, clf.predict(te_f))
 
 def run_deep_for_curves(model, loaders, epochs=200):
-    """运行深度学习模型获取训练曲线"""
+    """Run deep learning model to get training curves"""
     tr_loader, va_loader, te_loader = loaders
     model.to(device)
     opt = torch.optim.Adam(model.parameters(), lr=1e-3)
@@ -70,20 +70,20 @@ def run_deep_for_curves(model, loaders, epochs=200):
 
 def plot_training_curves():
     """
-    绘制五个模型在数据集A上的训练曲线和损失函数
-    使用2×1子图布局：上图显示准确率曲线，下图显示损失曲线
-    与compare.py的参数和逻辑对齐
+    Plot training curves and loss functions for five models on Dataset A
+    Using 2×1 subplot layout: top plot shows accuracy curves, bottom plot shows loss curves
+    Aligned with parameters and logic from compare.py
     """
     
-    # 设置随机种子（与compare.py一致）
+    # Set random seed (consistent with compare.py)
     set_seed(42)
     
-    # 设置matplotlib参数
+    # Set matplotlib parameters
     plt.rcParams['font.family'] = 'Times New Roman'
     plt.rcParams['font.weight'] = 'bold'
     plt.rcParams['font.size'] = 12
     
-    # 定义模型颜色（与compare.py完全一致）
+    # Define model colors (completely consistent with compare.py)
     palette = {
         '1D-CNN': (33/255, 158/255, 188/255),
         'WDCNN': (19/255, 103/255, 131/255),
@@ -92,7 +92,7 @@ def plot_training_curves():
         'DFTSRNet': 'red'
     }
     
-    # 模型列表（与compare.py一致）
+    # Model list (consistent with compare.py)
     MODELS = {
         '1D-CNN': CNN1D,
         'WDCNN': WDCNN,
@@ -101,31 +101,31 @@ def plot_training_curves():
         'DFTSRNet': lambda: DFTSRNet(num_classes=10)
     }
     
-    # 数据集A路径
+    # Dataset A path
     BASE_PATH = Config.BASE_DATA_PATH
     dataset_a_path = os.path.join(BASE_PATH, 'Dataset_A')
     
-    print("开始训练并收集数据集A的训练曲线...")
+    print("Starting training and collecting training curves for Dataset A...")
     
-    # 收集训练曲线数据
+    # Collect training curve data
     all_curves = {}
     loaders = get_dataloaders(dataset_a_path, batch_size=128)
     
     for name, ctor in MODELS.items():
-        print(f"正在训练 {name}...")
+        print(f"Training {name}...")
         test_acc, acc_hist, loss_hist = run_deep_for_curves(ctor(), loaders, epochs=200)
         all_curves[name] = (acc_hist, loss_hist)
-        print(f"  {name} 测试准确率: {test_acc:.4f}")
+        print(f"  {name} test accuracy: {test_acc:.4f}")
     
-    # 提取准确率和损失数据
+    # Extract accuracy and loss data
     acc_plot = {m: curves[0] for m, curves in all_curves.items()}
     loss_plot = {m: curves[1] for m, curves in all_curves.items()}
     
-    # 创建2x1子图布局：上图显示准确率曲线，下图显示损失曲线
+    # Create 2x1 subplot layout: top plot shows accuracy curves, bottom plot shows loss curves
     xs = np.arange(1, 201)
     fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
     
-    # 绘制准确率曲线
+    # Plot accuracy curves
     for m, c in acc_plot.items():
         style = {'lw': 4, 'color': palette[m]} if m == 'DFTSRNet' else {'lw': 1.5, 'color': palette[m]}
         ax[0].plot(xs, c, label=m, **style)
@@ -135,7 +135,7 @@ def plot_training_curves():
     ax[0].grid(True, alpha=0.3)
     ax[0].tick_params(axis='both', which='major', labelsize=14)
     
-    # 绘制损失曲线
+    # Plot loss curves
     for m, l in loss_plot.items():
         style = {'lw': 4, 'color': palette[m]} if m == 'DFTSRNet' else {'lw': 1.5, 'color': palette[m]}
         ax[1].plot(xs, l, **style)
@@ -146,18 +146,18 @@ def plot_training_curves():
     ax[1].grid(True, alpha=0.3)
     ax[1].tick_params(axis='both', which='major', labelsize=14)
     
-    # 调整布局
+    # Adjust layout
     plt.tight_layout()
     
-    # 保存图片（与compare.py一致的路径和参数）
+    # Save image (consistent path and parameters with compare.py)
     OUTPUT_DIR = r'e:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\GPT修改版\对比实验\对比试验结果'
     curve_path = os.path.join(OUTPUT_DIR, '训练曲线', 'training_curves_DatasetA.png')
     os.makedirs(os.path.dirname(curve_path), exist_ok=True)
     
     plt.savefig(curve_path, dpi=300)
     plt.close()
-    print(f"训练曲线图已保存到: {curve_path}")
-    print("\n训练曲线绘制完成！")
+    print(f"Training curve plot saved to: {curve_path}")
+    print("\nTraining curve plotting completed!")
 
 if __name__ == "__main__":
     plot_training_curves()
