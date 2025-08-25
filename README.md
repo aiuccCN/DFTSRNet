@@ -1,4 +1,12 @@
-# DFTSRNet: Deep Fourier Transform Spectral Residual Network
+# DFTSRNet: Dynamic Frequency-Time Structural Reasoning Network for Explainable Bearing Fault Diagnosis
+
+**Authors:** Dingyu Cao¹, Rongxi Wang¹*, Jing Yuan¹, Jianmin Gao¹  
+**Affiliation:** ¹State Key Laboratory for Manufacturing Systems Engineering, Xi'an Jiaotong University, Xi'an 710049, China  
+**Corresponding Author:** Rongxi Wang (rongxiwang@163.com)
+
+## Abstract
+
+Accurate and interpretable diagnosis of rolling bearings is crucial for reliable operation of rotating machinery. Many deep models remain black boxes and cannot adaptively select fault-informative frequency bands under changing loads and noise. This paper presents DFTSRNet, a Dynamic Frequency-Time Structural Reasoning Network that couples data-driven band selection with structural reasoning for robust and transparent diagnosis. The network first performs adaptive frequency-band selection with a learnable one-dimensional filter bank and assigns physically meaningful spectral attention to salient bands. It then models sub-bands as a fully connected graph and infers inter-band couplings through graph attention, producing structured embeddings. Finally, a modal-structural-fusion convolutional network injects graph-derived context by feature-wise linear modulation and completes classification with multi-scale residual convolutions.
 
 This repository contains the complete implementation of DFTSRNet for bearing fault diagnosis, including core model code, experimental scripts, and analysis tools.
 
@@ -14,9 +22,9 @@ DFTSRNet/
 │   ├── model.py                    # DFTSRNet model architecture
 │   └── train_eval.py               # Training and evaluation utilities
 ├── data_processing/                # Data preprocessing scripts
-│   ├── 均值归一化3s.py              # Mean normalization (3 seconds)
-│   ├── 数据集划分.PY                # Dataset splitting
-│   └── 数据集划分ABC.py             # Dataset splitting for ABC datasets
+│   ├── mean_normalization_3s.py    # Mean normalization (3 seconds)
+│   ├── dataset_split.py             # Dataset splitting
+│   └── dataset_split_ABC.py         # Dataset splitting for ABC datasets
 ├── data/                           # Dataset directory
 │   └── 西储大学实验数据集/           # Case Western Reserve University dataset
 │       ├── A/                      # Dataset A
@@ -54,10 +62,10 @@ pip install torch torchvision numpy pandas matplotlib scikit-learn
 
 ```bash
 # Normalize the dataset
-python data_processing/均值归一化3s.py
+python data_processing/mean_normalization_3s.py
 
 # Split the dataset
-python data_processing/数据集划分.PY
+python data_processing/dataset_split.py
 ```
 
 ### 3. Training DFTSRNet
@@ -105,27 +113,30 @@ python 20250810/step4_infogram_class6_ave.py
 
 ## Model Architecture
 
-DFTSRNet combines:
-- **DFT-based Feature Extraction**: Captures frequency domain characteristics
-- **Spectral Residual Learning**: Enhances feature representation
-- **Attention Mechanism**: Focuses on discriminative frequency components
-- **Multi-scale Processing**: Handles signals at different scales
+DFTSRNet integrates three coordinated components:
+
+1. **Adaptive Frequency-Band Selection**: Uses a learnable one-dimensional filter bank to perform adaptive frequency-band selection and assigns physically meaningful spectral attention to salient bands
+
+2. **Structural Reasoning Module**: Models sub-bands as a fully connected graph and infers inter-band couplings through graph attention, producing structured embeddings and a coupling matrix for interpretation
+
+3. **Modal-Structural-Fusion Network**: Injects graph-derived context by feature-wise linear modulation (FiLM) and completes classification with multi-scale residual convolutions
 
 ## Key Features
 
-1. **Frequency Domain Processing**: Utilizes DFT for robust feature extraction
-2. **Residual Learning**: Improves gradient flow and feature learning
-3. **Attention Mechanism**: Automatically focuses on important frequency bands
-4. **Multi-dataset Validation**: Tested on six different datasets (A-F)
-5. **Noise Robustness**: Evaluated under various noise conditions
-6. **Interpretability**: Comprehensive analysis of model decisions
+1. **Adaptive Band Selection**: Learnable filter bank that adaptively selects fault-informative frequency bands under changing conditions
+2. **Structural Reasoning**: Graph attention networks model inter-band couplings and provide sample-specific structural insights
+3. **Intrinsic Interpretability**: Attention weights and coupling matrix reveal which bands and interactions drive predictions
+4. **Robust Performance**: State-of-the-art accuracy with low variance and strong robustness to low signal-to-noise ratios
+5. **End-to-End Learning**: Trained without hand-crafted preprocessing, naturally extends to multi-sensor inputs
+6. **Lightweight Design**: Efficient parameter usage with feature-wise linear modulation
 
 ## Results
 
-- **Accuracy**: Achieves state-of-the-art performance on CWRU dataset
-- **Robustness**: Maintains high accuracy under noisy conditions
-- **Efficiency**: Competitive computational complexity
-- **Interpretability**: Clear visualization of learned features and attention patterns
+- **Datasets**: Evaluated on Case Western Reserve University (CWRU) benchmark and laboratory platform with N205 and NU205 bearings at 600, 800, and 1000 rpm
+- **Performance**: State-of-the-art accuracy with low variance across different operating conditions
+- **Robustness**: Strong performance maintained at low signal-to-noise ratios
+- **Interpretability**: Visual analyses confirm that selected bands and learned couplings align with bearing physics
+- **Ablation Studies**: Confirm the complementarity of all three network modules
 
 ## Citation
 
@@ -133,10 +144,11 @@ If you use this code in your research, please cite our paper:
 
 ```bibtex
 @article{dftsrnet2024,
-  title={DFTSRNet: Deep Fourier Transform Spectral Residual Network for Bearing Fault Diagnosis},
-  author={[Author Names]},
+  title={DFTSRNet: Dynamic Frequency-Time Structural Reasoning Network for Explainable Bearing Fault Diagnosis},
+  author={Cao, Dingyu and Wang, Rongxi and Yuan, Jing and Gao, Jianmin},
   journal={[Journal Name]},
-  year={2024}
+  year={2024},
+  note={State Key Laboratory for Manufacturing Systems Engineering, Xi'an Jiaotong University}
 }
 ```
 
@@ -146,4 +158,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-For questions and support, please contact [your-email@example.com].
+For questions and support, please contact:
+- **Corresponding Author**: Rongxi Wang (rongxiwang@163.com)
+- **Address**: 28 XianNing Road, Xi'an Jiaotong University, Xi'an 710049, China
+- **Tel**: +86-29-82663702
+- **Fax**: +86-29-82669137
