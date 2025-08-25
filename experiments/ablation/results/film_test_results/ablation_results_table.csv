@@ -1,0 +1,6 @@
+,mean,mean,std,std
+model_name,FiLM_only,Full_without_FiLM,FiLM_only,Full_without_FiLM
+dataset,,,,
+A,1.0,0.992,0.0,0.0
+B,1.0,1.0,0.0,0.0
+C,1.0,1.0,0.0,0.0

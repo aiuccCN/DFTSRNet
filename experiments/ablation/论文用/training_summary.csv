@@ -1,0 +1,13 @@
+model,seed,test_accuracy,best_val_accuracy
++AFBS,42,99.6,98.8
++AFBS,97,80.4,100.0
++AFBS,20,99.6,100.0
+w/o_AFBS,42,100.0,100.0
+w/o_AFBS,97,99.6,100.0
+w/o_AFBS,20,94.0,100.0
+w/o_FiLM,42,100.0,100.0
+w/o_FiLM,97,100.0,100.0
+w/o_FiLM,20,100.0,100.0
+Full,42,100.0,99.2
+Full,97,98.0,100.0
+Full,20,100.0,100.0

@@ -1,0 +1,38 @@
+[
+  {
+    "Model": "DFTSRNet",
+    "Training_Time": 357.86,
+    "Total_Epochs": 100,
+    "Best_Val_Loss": 0.008,
+    "Best_Val_Acc": 100.0,
+    "Test_Loss": 0.004,
+    "Test_Acc": 100.0,
+    "Last10_Train_Loss": 0.0208,
+    "Last10_Val_Loss": 0.0107,
+    "L1_L2_Ratio": 1.9398
+  },
+  {
+    "Model": "WDCNN",
+    "Training_Time": 1.01,
+    "Total_Epochs": 59,
+    "Best_Val_Loss": 0.3245,
+    "Best_Val_Acc": 87.2,
+    "Test_Loss": 0.332,
+    "Test_Acc": 88.4,
+    "Last10_Train_Loss": 0.017,
+    "Last10_Val_Loss": 0.3286,
+    "L1_L2_Ratio": 0.0518
+  },
+  {
+    "Model": "1D-CNN",
+    "Training_Time": 1.01,
+    "Total_Epochs": 46,
+    "Best_Val_Loss": 0.5631,
+    "Best_Val_Acc": 84.8,
+    "Test_Loss": 0.5743,
+    "Test_Acc": 77.2,
+    "Last10_Train_Loss": 0.0073,
+    "Last10_Val_Loss": 0.5668,
+    "L1_L2_Ratio": 0.0129
+  }
+]

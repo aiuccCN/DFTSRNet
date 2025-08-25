@@ -1,0 +1,81 @@
+Confusion Matrix for +AFBS (Seed 97)
+==================================================
+
+Matrix Format:
+Rows: True Labels
+Columns: Predicted Labels
+
+Confusion Matrix:
+Class 0:   25    0    0    0    0    0    0    0    0    0
+Class 1:    0    5    8   12    0    0    0    0    0    0
+Class 2:    0    0   25    0    0    0    0    0    0    0
+Class 3:    0    0    0   25    0    0    0    0    0    0
+Class 4:    0    0    0    0   25    0    0    0    0    0
+Class 5:    0    0    0    0    0   25    0    0    0    0
+Class 6:    0    0   25    0    0    0    0    0    0    0
+Class 7:    0    0    0    0    0    4    0   21    0    0
+Class 8:    0    0    0    0    0    0    0    0   25    0
+Class 9:    0    0    0    0    0    0    0    0    0   25
+
+Per-class Statistics:
+------------------------------
+Class 0:
+  Precision: 1.0000
+  Recall: 1.0000
+  F1-Score: 1.0000
+  Support: 25
+
+Class 1:
+  Precision: 1.0000
+  Recall: 0.2000
+  F1-Score: 0.3333
+  Support: 25
+
+Class 2:
+  Precision: 0.4310
+  Recall: 1.0000
+  F1-Score: 0.6024
+  Support: 25
+
+Class 3:
+  Precision: 0.6757
+  Recall: 1.0000
+  F1-Score: 0.8065
+  Support: 25
+
+Class 4:
+  Precision: 1.0000
+  Recall: 1.0000
+  F1-Score: 1.0000
+  Support: 25
+
+Class 5:
+  Precision: 0.8621
+  Recall: 1.0000
+  F1-Score: 0.9259
+  Support: 25
+
+Class 6:
+  Precision: 0.0000
+  Recall: 0.0000
+  F1-Score: 0.0000
+  Support: 25
+
+Class 7:
+  Precision: 1.0000
+  Recall: 0.8400
+  F1-Score: 0.9130
+  Support: 25
+
+Class 8:
+  Precision: 1.0000
+  Recall: 1.0000
+  F1-Score: 1.0000
+  Support: 25
+
+Class 9:
+  Precision: 1.0000
+  Recall: 1.0000
+  F1-Score: 1.0000
+  Support: 25
+

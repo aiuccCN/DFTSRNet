@@ -1,0 +1,4 @@
+Model,Training_Time,Total_Epochs,Best_Val_Loss,Best_Val_Acc,Test_Loss,Test_Acc,Last10_Train_Loss,Last10_Val_Loss,L1_L2_Ratio
+DFTSRNet,319.42,86,0.0115,100,0.0074,100,0.033,0.0185,1.7861
+WDCNN,0.82,51,0.3811,86.8,0.376,86,0.0288,0.3884,0.0743
+1D-CNN,0.85,41,0.5762,81.6,0.6249,76.8,0.0062,0.5815,0.0107

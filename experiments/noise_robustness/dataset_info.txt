@@ -1,0 +1,46 @@
+Dataset_B 噪声数据集信息
+==================================================
+
+原始数据路径: e:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\数据集\西储大学实验数据集\Dataset_B
+输出路径: e:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\GPT修改版\不同噪声水平实验
+
+数据集结构:
+- 训练数据: (500, 1024) (无噪声)
+- 验证数据: (250, 1024) (无噪声)
+- 测试数据: (250, 1024) (添加噪声)
+
+SNR级别:
+- 2 dB
+- 0 dB
+- -2 dB
+- -4 dB
+
+生成的数据集目录:
+- Dataset_B_SNR_2dB/
+  ├── train_data_preprocessed.npy (无噪声)
+  ├── train_labels.npy
+  ├── val_data_preprocessed.npy (无噪声)
+  ├── val_labels.npy
+  ├── test_data_preprocessed.npy (SNR 2dB噪声)
+  └── test_labels.npy
+- Dataset_B_SNR_0dB/
+  ├── train_data_preprocessed.npy (无噪声)
+  ├── train_labels.npy
+  ├── val_data_preprocessed.npy (无噪声)
+  ├── val_labels.npy
+  ├── test_data_preprocessed.npy (SNR 0dB噪声)
+  └── test_labels.npy
+- Dataset_B_SNR_-2dB/
+  ├── train_data_preprocessed.npy (无噪声)
+  ├── train_labels.npy
+  ├── val_data_preprocessed.npy (无噪声)
+  ├── val_labels.npy
+  ├── test_data_preprocessed.npy (SNR -2dB噪声)
+  └── test_labels.npy
+- Dataset_B_SNR_-4dB/
+  ├── train_data_preprocessed.npy (无噪声)
+  ├── train_labels.npy
+  ├── val_data_preprocessed.npy (无噪声)
+  ├── val_labels.npy
+  ├── test_data_preprocessed.npy (SNR -4dB噪声)
+  └── test_labels.npy

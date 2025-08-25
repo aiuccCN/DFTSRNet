@@ -1,0 +1,4 @@
+Model,Spectral Gini (Mean),Spectral Gini (Std)
+DFTSRNet,0.2835,0.0832
+WDCNN,0.4278,0.0377
+1D-CNN,0.2524,0.0626

@@ -1,0 +1,7 @@
+model_name,dataset,mean_accuracy,std_accuracy,min_accuracy,max_accuracy
+FiLM_only,A,1.0,0.0,1.0,1.0
+FiLM_only,B,1.0,0.0,1.0,1.0
+FiLM_only,C,1.0,0.0,1.0,1.0
+Full_without_FiLM,A,0.992,0.0,0.992,0.992
+Full_without_FiLM,B,1.0,0.0,1.0,1.0
+Full_without_FiLM,C,1.0,0.0,1.0,1.0
