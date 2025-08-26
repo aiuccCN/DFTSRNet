@@ -99,16 +99,16 @@ python run_ablation.py
 ```bash
 cd experiments/interpretability
 # Step 1: Feature map visualization
-python 20250808/第一层特征提取/step1_layer1_feature_maps.py
+python step1_layer1_feature_maps/step1_layer1_feature_maps.py
 
 # Step 2: Gini importance analysis
-python 20250808/基尼/step2_gini_and_lossratio.py
+python "Step 2 Gini importance analysis"/step2_gini_and_lossratio.py
 
 # Step 3: Attention-weighted spectrum
-python 20250808/注意力加权频谱/step3_attention_spectrum.py
+python "Step 3  Attention-weighted spectrum"/step3_attention_spectrum.py
 
 # Step 4: Infogram analysis
-python 20250810/step4_infogram_class6_ave.py
+python "Step 4 Infogram analysis"/step4_infogram_class6_ave.py
 ```
 
 ## Model Architecture
