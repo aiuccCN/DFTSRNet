@@ -1,10 +1,15 @@
 import torch, os
 
+# Resolve paths relative to this file so the repo is self-contained / portable.
+_HERE = os.path.dirname(os.path.abspath(__file__))       # .../DFTSRNet/core
+_REPO = os.path.dirname(_HERE)                            # .../DFTSRNet
+_DATA = os.path.join(_REPO, "data", "dataset")           # bundled preprocessed npy (Dataset_A..F)
+
 class Config:
-    DATA_ROOT = r"E:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\数据集\西储大学实验数据集"
-    OUTPUT_DIR = r"E:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\GPT修改版\results"
+    DATA_ROOT = os.environ.get("DFTSR_DATA_ROOT", _DATA)
+    OUTPUT_DIR = os.environ.get("DFTSR_OUTPUT_DIR", os.path.join(_REPO, "results"))
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    BASE_DATA_PATH = r"E:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\数据集\西储大学实验数据集"
+    BASE_DATA_PATH = DATA_ROOT
 
     # 数据 / 任务
     INPUT_CHANNELS = 1
