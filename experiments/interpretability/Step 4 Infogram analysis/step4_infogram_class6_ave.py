@@ -20,11 +20,12 @@ from scipy.signal import hilbert
 from scipy.signal.windows import hann
 
 # ---------------- Paths & constants ----------------
-DATA_PATH = r"E:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\数据集\class6.npy"
+_HERE = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.environ.get("AUTOGRAM_DATA", os.path.join(_HERE, "class6.npy"))
 FS = 12000  # Hz
 LEVEL = 5   # same default as MATLAB脚本里的示例，可改 5~8
 WAVELET = "db12"
-OUT_DIR = r"E:\PA_SAD_VKCNN_UADP_AFN\论文全流程解决方案\AMSN框架\GPT修改版\新版可解释实验\20250810\autogram"
+OUT_DIR = os.environ.get("AUTOGRAM_OUT", _HERE)
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # ----- 版式（Times New Roman、细长）-----
