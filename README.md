@@ -126,7 +126,8 @@ If you use this code in your research, please cite our paper:
   author  = {Cao, Dingyu and Wang, Rongxi and Yuan, Jing and Gao, Jianmin},
   journal = {Measurement},
   year    = {2026},
-  note    = {State Key Laboratory for Manufacturing Systems Engineering, Xi'an Jiaotong University}
+  doi     = {10.1016/j.measurement.2026.123438},
+  url     = {https://doi.org/10.1016/j.measurement.2026.123438}
 }
 ```
 
