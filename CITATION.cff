@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the published paper."
+title: "Dynamic Frequency-Temporal Structural Reasoning Network for Interpretable Bearing Fault Diagnosis"
+authors:
+  - family-names: Cao
+    given-names: Dingyu
+  - family-names: Wang
+    given-names: Rongxi
+  - family-names: Yuan
+    given-names: Jing
+  - family-names: Gao
+    given-names: Jianmin
+type: article
+journal: Measurement
+date-released: 2026
+doi: 10.1016/j.measurement.2026.123438
+url: https://doi.org/10.1016/j.measurement.2026.123438
